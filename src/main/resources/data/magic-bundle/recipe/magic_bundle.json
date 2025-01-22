@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "magic-bundle:broken_magic_bundle"
+    },
+    "0": {
+      "item": "minecraft:leather"
+    }
+  },
+  "pattern": [
+    " 0 ",
+    "0#0",
+    " 0 "
+  ],
+  "result": {
+    "count": 1,
+    "id": "magic-bundle:magic_bundle"
+  }
+}

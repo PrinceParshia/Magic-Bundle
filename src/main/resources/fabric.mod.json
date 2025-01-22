@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "magic-bundle",
+	"version": "${version}",
+	"name": "Magic Bundle",
+	"description": "",
+	"authors": [
+		"PrinceParshia, Creatomat"
+	],
+	"contact": {
+		"discord": "https://discord.gg/rK5RbYS9Bm"
+	},
+	"license": "All Rights Reserved",
+	"icon": "magic-bundle.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"crea8to.princ.magicbundle.MagicBundle"
+		],
+		"client": [
+			"crea8to.princ.magicbundle.MagicBundleClient"
+		]
+	},
+	"mixins": [
+		"magic-bundle.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"minecraft": "~1.21",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}
