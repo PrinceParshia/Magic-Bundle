@@ -9,5 +9,6 @@ public class MagicBundle implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		Items.register();
+		LootTable.register();
 	}
 }
