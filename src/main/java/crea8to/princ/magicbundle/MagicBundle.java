@@ -3,11 +3,14 @@ package crea8to.princ.magicbundle;
 import crea8to.princ.magicbundle.item.Items;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
+import net.minecraft.text.Text;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -25,7 +28,10 @@ public class MagicBundle implements ModInitializer {
 	public void onInitialize() {
 		Items.register();
 		LootTable();
-		randomEvent();
+
+		ServerWorldEvents.LOAD.register((server, world) -> {
+			randomEvent();
+		});
 	}
 
 	public void LootTable() {
@@ -42,10 +48,11 @@ public class MagicBundle implements ModInitializer {
 		});
 	}
 
-	public  void randomEvent() {
+	public void randomEvent() {
 		ServerTickEvents.END_SERVER_TICK.register((server) -> {
 			if (!scheduled) {
 				scheduled = true;
+
 				switch (random.nextInt(4)) {
 					case 0:
 						delay = 2;
@@ -65,13 +72,21 @@ public class MagicBundle implements ModInitializer {
 				}
 
 				scheduler.schedule(() -> {
-					random.nextBoolean() ?
-							action1 :
-							action2
-									(server);
-					scheduled = false;
+                    if (random.nextBoolean()) {
+						// action 1
+                    } else {
+						//action 2
+                    }
+                    scheduled = false;
+					randomEvent();
 				}, delay, TimeUnit.MINUTES);
 			}
 		});
+	}
+
+	public void doubleContents() {
+	}
+
+	public void createExplosion() {
 	}
 }
