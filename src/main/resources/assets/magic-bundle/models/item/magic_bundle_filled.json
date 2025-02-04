@@ -1,5 +1,5 @@
 {
-  "parent": "magic-bundle:item/magic_bundle",
+  "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "magic-bundle:item/magic_bundle_filled"
   }
