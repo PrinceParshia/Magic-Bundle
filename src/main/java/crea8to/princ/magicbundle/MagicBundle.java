@@ -38,9 +38,9 @@ public class MagicBundle implements ModInitializer {
 		Items.register();
 		modifyLootTable();
 
-		ServerWorldEvents.LOAD.register((server, world) -> {
-			randomEventManager();
-		});
+//		ServerWorldEvents.LOAD.register((server, world) -> {
+//			randomEventManager();
+//		});
 	}
 
 	private void modifyLootTable() {
@@ -57,134 +57,134 @@ public class MagicBundle implements ModInitializer {
 		});
 	}
 
-	private void randomEventManager() {
-		ServerTickEvents.END_SERVER_TICK.register((server) -> {
-			if (client.player != null) {
-				int magicBundleCount = getMagicBundleCount();
-
-				if (magicBundleCount == 1 && !hasMagicBundle) {
-					hasMagicBundle = true;
-					startScheduledEvent();
-				} else if (magicBundleCount > 1 && hasMagicBundle) {
-					hasMagicBundle = false;
-					cancelScheduledTasks();
-					client.player.sendMessage(Text.of("<MagicBundle> You must have exactly one Magic Bundle to continue having its facilities."), false);
-				} else if (magicBundleCount == 0 && hasMagicBundle) {
-					hasMagicBundle = false;
-					cancelScheduledTasks();
-				}
-			}
-		});
-	}
-
-	private void startScheduledEvent() {
-		if (!scheduled) {
-			scheduled = true;
-			client.player.sendMessage(Text.of("<MagicBundle> Be Ready!"));
-			scheduleTasks();
-		}
-	}
-
-	private void scheduleTasks() {
-		int delay = 0;
-		int countdownStartFrom = 5;
-
-		switch (random.nextInt(4)) {
-			case 0:
-				delay = 2;
-				break;
-			case 1:
-				delay = 3;
-				break;
-			case 2:
-				delay = 4;
-				break;
-			case 3:
-				delay = 5;
-				break;
-			default:
-				delay = 2;
-				break;
-		}
-
-		if (!scheduler.isShutdown()) {
-			ScheduledFuture<?> initialTask = scheduler.schedule(() -> {
-				for (int i = countdownStartFrom; i > 0; i--) {
-					final int count = i;
-					if (!scheduler.isShutdown()) {
-						ScheduledFuture<?> countdownTask = scheduler.schedule(() -> {
-							client.player.sendMessage(Text.of("<MagicBundle> Something Will Happen In " + count + "..."), false);
-						}, countdownStartFrom - count, TimeUnit.SECONDS);
-						scheduledTasks.add(countdownTask);
-					}
-				}
-
-				if (!scheduler.isShutdown()) {
-					ScheduledFuture<?> finalTask = scheduler.schedule(() -> {
-						if (hasMagicBundle) {
-							if (random.nextBoolean()) {
-								//action 1
-							} else {
-								createExplosion();
-								removeMagicBundleFromInventory();
-							}
-						}
-						scheduled = false; // Reset the scheduled flag
-						if (getMagicBundleCount() == 1) {
-							startScheduledEvent();
-						}
-					}, countdownStartFrom, TimeUnit.SECONDS);
-					scheduledTasks.add(finalTask);
-				}
-			}, delay, TimeUnit.SECONDS);
-			scheduledTasks.add(initialTask);
-		}
-	}
-
-	private void cancelScheduledTasks() {
-		for (ScheduledFuture<?> task : scheduledTasks) {
-			task.cancel(true);
-		}
-		scheduledTasks.clear();
-		scheduler.shutdownNow();
-		try {
-			if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
-				scheduler.shutdownNow();
-			}
-		} catch (InterruptedException e) {
-			scheduler.shutdownNow();
-			Thread.currentThread().interrupt();
-		}
-		scheduler = Executors.newScheduledThreadPool(1);
-		scheduled = false;
-	}
-
-	private void createExplosion() {
-		if (client.player != null) {
-			client.player.sendMessage(Text.of("<MagicBundle> Bad Luck...!"));
-			client.world.createExplosion(null, client.player.getBlockPos().getX(), client.player.getBlockPos().getY(), client.player.getBlockPos().getZ(), 9.0F, true, ExplosionSourceType.NONE);
-		}
-	}
-
-	private int getMagicBundleCount() {
-		int count = 0;
-		for (int i = 0; i < client.player.getInventory().size(); i++) {
-			ItemStack stack = client.player.getInventory().getStack(i);
-			if (stack.getItem() == Items.MAGIC_BUNDLE) {
-				count += stack.getCount();
-			}
-		}
-		return count;
-	}
-
-	private void removeMagicBundleFromInventory() {
-		if (client.player != null) {
-			for (int i = 0; i < client.player.getInventory().size(); i++) {
-				ItemStack stack = client.player.getInventory().getStack(i);
-				if (stack.getItem() == Items.MAGIC_BUNDLE) {
-					client.player.getInventory().removeStack(i);
-				}
-			}
-		}
-	}
+//	private void randomEventManager() {
+//		ServerTickEvents.END_SERVER_TICK.register((server) -> {
+//			if (client.player != null) {
+//				int magicBundleCount = getMagicBundleCount();
+//
+//				if (magicBundleCount == 1 && !hasMagicBundle) {
+//					hasMagicBundle = true;
+//					startScheduledEvent();
+//				} else if (magicBundleCount > 1 && hasMagicBundle) {
+//					hasMagicBundle = false;
+//					cancelScheduledTasks();
+//					client.player.sendMessage(Text.of("<MagicBundle> You must have exactly one Magic Bundle to continue having its facilities."), false);
+//				} else if (magicBundleCount == 0 && hasMagicBundle) {
+//					hasMagicBundle = false;
+//					cancelScheduledTasks();
+//				}
+//			}
+//		});
+//	}
+//
+//	private void startScheduledEvent() {
+//		if (!scheduled) {
+//			scheduled = true;
+//			client.player.sendMessage(Text.of("<MagicBundle> Be Ready!"));
+//			scheduleTasks();
+//		}
+//	}
+//
+//	private void scheduleTasks() {
+//		int delay = 0;
+//		int countdownStartFrom = 5;
+//
+//		switch (random.nextInt(4)) {
+//			case 0:
+//				delay = 2;
+//				break;
+//			case 1:
+//				delay = 3;
+//				break;
+//			case 2:
+//				delay = 4;
+//				break;
+//			case 3:
+//				delay = 5;
+//				break;
+//			default:
+//				delay = 2;
+//				break;
+//		}
+//
+//		if (!scheduler.isShutdown()) {
+//			ScheduledFuture<?> initialTask = scheduler.schedule(() -> {
+//				for (int i = countdownStartFrom; i > 0; i--) {
+//					final int count = i;
+//					if (!scheduler.isShutdown()) {
+//						ScheduledFuture<?> countdownTask = scheduler.schedule(() -> {
+//							client.player.sendMessage(Text.of("<MagicBundle> Something Will Happen In " + count + "..."), false);
+//						}, countdownStartFrom - count, TimeUnit.SECONDS);
+//						scheduledTasks.add(countdownTask);
+//					}
+//				}
+//
+//				if (!scheduler.isShutdown()) {
+//					ScheduledFuture<?> finalTask = scheduler.schedule(() -> {
+//						if (hasMagicBundle) {
+//							if (random.nextBoolean()) {
+//								//action 1
+//							} else {
+//								createExplosion();
+//								removeMagicBundleFromInventory();
+//							}
+//						}
+//						scheduled = false; // Reset the scheduled flag
+//						if (getMagicBundleCount() == 1) {
+//							startScheduledEvent();
+//						}
+//					}, countdownStartFrom, TimeUnit.SECONDS);
+//					scheduledTasks.add(finalTask);
+//				}
+//			}, delay, TimeUnit.SECONDS);
+//			scheduledTasks.add(initialTask);
+//		}
+//	}
+//
+//	private void cancelScheduledTasks() {
+//		for (ScheduledFuture<?> task : scheduledTasks) {
+//			task.cancel(true);
+//		}
+//		scheduledTasks.clear();
+//		scheduler.shutdownNow();
+//		try {
+//			if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
+//				scheduler.shutdownNow();
+//			}
+//		} catch (InterruptedException e) {
+//			scheduler.shutdownNow();
+//			Thread.currentThread().interrupt();
+//		}
+//		scheduler = Executors.newScheduledThreadPool(1);
+//		scheduled = false;
+//	}
+//
+//	private void createExplosion() {
+//		if (client.player != null) {
+//			client.player.sendMessage(Text.of("<MagicBundle> Bad Luck...!"));
+//			client.world.createExplosion(null, client.player.getBlockPos().getX(), client.player.getBlockPos().getY(), client.player.getBlockPos().getZ(), 9.0F, true, ExplosionSourceType.NONE);
+//		}
+//	}
+//
+//	private int getMagicBundleCount() {
+//		int count = 0;
+//		for (int i = 0; i < client.player.getInventory().size(); i++) {
+//			ItemStack stack = client.player.getInventory().getStack(i);
+//			if (stack.getItem() == Items.MAGIC_BUNDLE) {
+//				count += stack.getCount();
+//			}
+//		}
+//		return count;
+//	}
+//
+//	private void removeMagicBundleFromInventory() {
+//		if (client.player != null) {
+//			for (int i = 0; i < client.player.getInventory().size(); i++) {
+//				ItemStack stack = client.player.getInventory().getStack(i);
+//				if (stack.getItem() == Items.MAGIC_BUNDLE) {
+//					client.player.getInventory().removeStack(i);
+//				}
+//			}
+//		}
+//	}
 }
