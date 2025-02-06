@@ -15,8 +15,14 @@ public class MagicBundleItem extends BundleItem {
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         NbtCompound getMagicBundleData = stack.get(DataComponentTypes.CUSTOM_DATA).copyNbt();
-        World invtimevariable = getMagicBundleData.contains("i dont understand..");
 
-        if (invtimevariable > world.getRandom().nextIntBetween(2400, 6000)) {}
+        int invTime = 0;
+        if (getMagicBundleData.contains("invTime")) {
+            invTime = getMagicBundleData.getInt("invTime");
+        }
+
+        if (invTime > world.getRandom().nextBetween(2400, 6000)) {
+
+        }
     }
 }
