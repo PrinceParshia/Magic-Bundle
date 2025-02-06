@@ -9,8 +9,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
-import java.util.Random;
-
 public class MagicBundleItem extends BundleItem {
     public MagicBundleItem(Settings settings) {
         super(settings);
@@ -22,11 +20,15 @@ public class MagicBundleItem extends BundleItem {
 
         if (getMagicBundleData.contains("invTime")) {
             int invTime = getMagicBundleData.getInt("invTime");
+            getMagicBundleData.putInt("invTime", invTime++);
+
+
             if (invTime > world.getRandom().nextBetween(100, 120)) {
                 MinecraftClient.getInstance().player.sendMessage(Text.of("hell"), false);
             }
         } else {
             stack.get(DataComponentTypes.CUSTOM_DATA).apply(nbt -> nbt.putInt("invTime", 0));
         }
+
     }
 }
