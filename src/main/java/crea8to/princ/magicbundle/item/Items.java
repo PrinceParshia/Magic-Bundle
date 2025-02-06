@@ -14,13 +14,18 @@ import net.minecraft.util.Identifier;
 import static crea8to.princ.magicbundle.MagicBundle.MOD_ID;
 
 public class Items {
-    public static final Item BROKEN_MAGIC_BUNDLE = new Item(new Item.Settings().maxCount(16));
+    public static final Item BROKEN_MAGIC_BUNDLE = new Item(new Item.Settings()
+            .maxCount(16)
+    );
     public static final BundleItem MAGIC_BUNDLE = new MagicBundleItem(new Item.Settings()
             .maxCount(1)
             .component(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT)
             .component(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT.apply(compound -> compound.putInt(MagicBundleItem.TIME_TAG, 0)))
     );
-    public static final BundleItem USED_MAGIC_BUNDLE = new BundleItem(new Item.Settings().maxCount(1).component(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT));
+    public static final BundleItem USED_MAGIC_BUNDLE = new BundleItem(new Item.Settings()
+            .maxCount(1)
+            .component(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT)
+    );
 
     public static void register() {
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "broken_magic_bundle"), BROKEN_MAGIC_BUNDLE);
