@@ -15,7 +15,7 @@ import static crea8to.princ.magicbundle.MagicBundle.MOD_ID;
 public class Items {
     public static final Item BROKEN_MAGIC_BUNDLE = new Item(new Item.Settings().maxCount(16));
     public static final BundleItem MAGIC_BUNDLE = new BundleItem(new Item.Settings().maxCount(1).component(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT));
-    public static final BundleItem MAGIC_BUNDLE_USED = new BundleItem(new Item.Settings().maxCount(1).component(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT));
+    public static final BundleItem USED_MAGIC_BUNDLE = new BundleItem(new Item.Settings().maxCount(1).component(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT));
 
     public static void register() {
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "broken_magic_bundle"), BROKEN_MAGIC_BUNDLE);
@@ -25,11 +25,11 @@ public class Items {
         });
 
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "magic_bundle"), MAGIC_BUNDLE);
-        Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "magic_bundle_used"), MAGIC_BUNDLE_USED);
+        Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "used_magic_bundle"), USED_MAGIC_BUNDLE);
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.SEARCH).register(entries -> {
             entries.add(MAGIC_BUNDLE);
-            entries.add(MAGIC_BUNDLE_USED);
+            entries.add(USED_MAGIC_BUNDLE);
         });
     }
 }

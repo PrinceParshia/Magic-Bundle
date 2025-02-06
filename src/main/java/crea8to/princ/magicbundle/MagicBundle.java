@@ -11,10 +11,10 @@ import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 import net.minecraft.world.World.ExplosionSourceType;
+import net.minecraft.world.explosion.Explosion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,7 +162,7 @@ public class MagicBundle implements ModInitializer {
 	private void createExplosion() {
 		if (client.player != null) {
 			client.player.sendMessage(Text.of("<MagicBundle> Bad Luck...!"));
-			client.world.createExplosion(null, client.player.getBlockPos().getX(), client.player.getBlockPos().getY(), client.player.getBlockPos().getZ(), 9.0F, ExplosionSourceType.NONE);
+			client.world.createExplosion(null, client.player.getBlockPos().getX(), client.player.getBlockPos().getY(), client.player.getBlockPos().getZ(), 9.0F, true, ExplosionSourceType.NONE);
 		}
 	}
 
