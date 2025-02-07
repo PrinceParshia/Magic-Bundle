@@ -27,6 +27,7 @@ public class MagicBundleItem extends BundleItem {
 
         Random random = world.getRandom();
         NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
+        NbtComponent nbt = stack.get(DataComponentTypes.CUSTOM_DATA);
         if (component == null) {
             return;
         }
@@ -35,9 +36,10 @@ public class MagicBundleItem extends BundleItem {
             if (compound.contains(TIME_TAG, NbtElement.INT_TYPE)) {
                 int invTime = compound.getInt(TIME_TAG) + 1;
 
-                if (invTime > random.nextBetween(100, 120)) {
+                if (invTime > random.nextBetween(200, 220)) {
                     if (random.nextBoolean()) {
-                        entity.dropItem(Items.USED_MAGIC_BUNDLE);
+                        ItemStack magicBundleNbt = new ItemStack(Items.USED_MAGIC_BUNDLE);
+                        magicBundleNbt.set(DataComponentTypes.CUSTOM_DATA, nbt);
                         entity.dropItem(Items.USED_MAGIC_BUNDLE);
                     }
                     else {
