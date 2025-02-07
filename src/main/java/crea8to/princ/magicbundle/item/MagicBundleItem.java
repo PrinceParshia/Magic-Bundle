@@ -1,19 +1,26 @@
 package crea8to.princ.magicbundle.item;
 
-import crea8to.princ.magicbundle.MagicBundle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BundleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class MagicBundleItem extends BundleItem {
     public static final String TIME_TAG = "invTime";
+
+    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public MagicBundleItem(Settings settings) {
         super(settings);
@@ -27,7 +34,7 @@ public class MagicBundleItem extends BundleItem {
 
         Random random = world.getRandom();
         NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
-        NbtComponent nbt = stack.get(DataComponentTypes.CUSTOM_DATA);
+        BundleContentsComponent nbt = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
         if (component == null) {
             return;
         }
@@ -36,11 +43,12 @@ public class MagicBundleItem extends BundleItem {
             if (compound.contains(TIME_TAG, NbtElement.INT_TYPE)) {
                 int invTime = compound.getInt(TIME_TAG) + 1;
 
-                if (invTime > random.nextBetween(200, 220)) {
+                if (invTime > random.nextBetween(100, 120)) {
                     if (random.nextBoolean()) {
                         ItemStack magicBundleNbt = new ItemStack(Items.USED_MAGIC_BUNDLE);
-                        magicBundleNbt.set(DataComponentTypes.CUSTOM_DATA, nbt);
-                        entity.dropItem(Items.USED_MAGIC_BUNDLE);
+                        magicBundleNbt.set(DataComponentTypes.BUNDLE_CONTENTS, nbt);
+                        entity.dropStack(magicBundleNbt);
+                        entity.dropStack(magicBundleNbt);
                     }
                     else {
                         world.createExplosion(
