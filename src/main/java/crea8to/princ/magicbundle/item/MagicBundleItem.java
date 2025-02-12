@@ -12,15 +12,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
 public class MagicBundleItem extends BundleItem {
-
     public static final String TIME_TAG = "invTime";
     private static final String MAX_TIME_TAG = "maxInvTime";
-
-    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public MagicBundleItem(Settings settings) {
         super(settings);
@@ -41,7 +35,7 @@ public class MagicBundleItem extends BundleItem {
 
         stack.set(DataComponentTypes.CUSTOM_DATA, component.apply(compound -> {
             if (!compound.contains(MAX_TIME_TAG, NbtElement.INT_TYPE)) {
-                compound.putInt(MAX_TIME_TAG, random.nextBetween(100, 120));
+                compound.putInt(MAX_TIME_TAG, random.nextBetween(2400, 6000));
             }
 
             if (compound.contains(TIME_TAG, NbtElement.INT_TYPE)) {
@@ -50,18 +44,13 @@ public class MagicBundleItem extends BundleItem {
 
                 if (invTime >= (maxTimeTag - 100)) {
                     if (invTime % 20 == 0) {
-                        entity.sendMessage(Text.literal(String.valueOf(((maxTimeTag - invTime) / 20) + 1)));
+                        entity.sendMessage(Text.of("<MagicBundle> An Action Happens In... " + (((maxTimeTag - invTime) / 20))));
                     }
                 }
 
                 if (invTime >= maxTimeTag) {
                     if (random.nextBoolean()) {
-                        ItemStack droppedStack = new ItemStack(Items.USED_MAGIC_BUNDLE);
-                        droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, bundleComponent);
-                        entity.dropStack(droppedStack);
-                        entity.dropStack(droppedStack.copy());
-                    }
-                    else {
+                        entity  .sendMessage(Text.of("<MagicBundle> Bad Luck!"));
                         world.createExplosion(
                                 null,
                                 entity.getX(),
@@ -70,6 +59,13 @@ public class MagicBundleItem extends BundleItem {
                                 7.0F,
                                 World.ExplosionSourceType.MOB
                         );
+                    }
+                    else {
+                        ItemStack droppedStack = new ItemStack(Items.USED_MAGIC_BUNDLE);
+                        droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, bundleComponent);
+                        entity.sendMessage(Text.of("<MagicBundle> What a Luck!"));
+                        entity.dropStack(droppedStack);
+                        entity.dropStack(droppedStack.copy());
                     }
 
                     if (entity instanceof PlayerEntity player) {
