@@ -35,7 +35,7 @@ public class MagicBundleItem extends BundleItem {
 
         stack.set(DataComponentTypes.CUSTOM_DATA, component.apply(compound -> {
             if (!compound.contains(MAX_TIME_TAG, NbtElement.INT_TYPE)) {
-                compound.putInt(MAX_TIME_TAG, random.nextBetween(2400, 6000));
+                compound.putInt(MAX_TIME_TAG, random.nextBetween(2500, 6100));
             }
 
             if (compound.contains(TIME_TAG, NbtElement.INT_TYPE)) {
@@ -44,7 +44,7 @@ public class MagicBundleItem extends BundleItem {
 
                 if (invTime >= (maxTimeTag - 100)) {
                     if (invTime % 20 == 0) {
-                        entity.sendMessage(Text.of("<MagicBundle> An Action Happens In... " + (((maxTimeTag - invTime) / 20))));
+                        entity.sendMessage(Text.of("<MagicBundle> An Action Happens In... " + (((maxTimeTag - invTime) / 20) + 1)));
                     }
                 }
 
