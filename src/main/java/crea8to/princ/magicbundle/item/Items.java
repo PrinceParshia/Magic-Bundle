@@ -35,7 +35,9 @@ public class Items {
         });
 
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "magic_bundle"), MAGIC_BUNDLE);
+        MagicBundleItem.registerModelPredicate();
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "used_magic_bundle"), USED_MAGIC_BUNDLE);
+        UsedMagicBundleItem.registerModelPredicate();
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.SEARCH).register(entries -> {
             entries.add(MAGIC_BUNDLE);
