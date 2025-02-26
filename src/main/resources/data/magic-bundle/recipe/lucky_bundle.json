@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "magic-bundle:broken_lucky_bundle"
+    },
+    "0": {
+      "item": "minecraft:rabbit_hide"
+    }
+  },
+  "pattern": [
+    "000",
+    "0#0",
+    "000"
+  ],
+  "result": {
+    "count": 1,
+    "id": "magic-bundle:lucky_bundle"
+  }
+}

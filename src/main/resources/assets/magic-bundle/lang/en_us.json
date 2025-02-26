@@ -1,5 +1,8 @@
 {
   "item.magic-bundle.broken_magic_bundle": "Broken Magic Bundle",
   "item.magic-bundle.magic_bundle": "Magic Bundle",
-  "item.magic-bundle.used_magic_bundle": "Magic Bundle"
+  "item.magic-bundle.used_magic_bundle": "Magic Bundle",
+  "item.magic-bundle.broken_lucky_bundle": "Broken Lucky Bundle",
+  "item.magic-bundle.lucky_bundle": "Lucky Bundle",
+  "item.magic-bundle.used_lucky_bundle": "Lucky Bundle"
 }

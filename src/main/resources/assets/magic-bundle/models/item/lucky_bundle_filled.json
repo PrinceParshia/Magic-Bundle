@@ -1,0 +1,6 @@
+{
+  "parent": "magic-bundle:item/lucky_bundle",
+  "textures": {
+    "layer0": "magic-bundle:item/lucky_bundle_filled"
+  }
+}

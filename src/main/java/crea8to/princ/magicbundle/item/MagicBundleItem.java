@@ -1,6 +1,5 @@
 package crea8to.princ.magicbundle.item;
 
-import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.component.type.NbtComponent;
@@ -10,7 +9,6 @@ import net.minecraft.item.BundleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
@@ -30,7 +28,7 @@ public class MagicBundleItem extends BundleItem {
 
         Random random = world.getRandom();
         NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
-        BundleContentsComponent bundleComponent = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
+        BundleContentsComponent bundleContentsComponent = (BundleContentsComponent) stack.get(DataComponentTypes.BUNDLE_CONTENTS);
         if (component == null) {
             return;
         }
@@ -52,7 +50,7 @@ public class MagicBundleItem extends BundleItem {
 
                 if (invTime >= maxTimeTag) {
                     if (random.nextBoolean()) {
-                        entity  .sendMessage(Text.of("<MagicBundle> Bad Luck!"));
+                        entity.sendMessage(Text.of("<MagicBundle> Bad Luck!"));
                         world.createExplosion(
                                 null,
                                 entity.getX(),
@@ -63,11 +61,23 @@ public class MagicBundleItem extends BundleItem {
                         );
                     }
                     else {
-                        ItemStack droppedStack = new ItemStack(Items.USED_MAGIC_BUNDLE);
-                        droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, bundleComponent);
-                        entity.sendMessage(Text.of("<MagicBundle> What a Luck!"));
-                        entity.dropStack(droppedStack);
-                        entity.dropStack(droppedStack.copy());
+                        if (random.nextBoolean()) {
+                            entity.sendMessage(Text.of("<MagicBundle> Bad Luck!"));
+                            world.createExplosion(
+                                    null,
+                                    entity.getX(),
+                                    entity.getY(),
+                                    entity.getZ(),
+                                    10.0F,
+                                    World.ExplosionSourceType.MOB
+                            );
+                        } else {
+                            ItemStack droppedStack = new ItemStack(Items.USED_MAGIC_BUNDLE);
+                            droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, bundleContentsComponent);
+                            entity.sendMessage(Text.of("<MagicBundle> What a Luck!"));
+                            entity.dropStack(droppedStack);
+                            entity.dropStack(droppedStack.copy());
+                        }
                     }
 
                     if (entity instanceof PlayerEntity player) {
@@ -79,14 +89,5 @@ public class MagicBundleItem extends BundleItem {
                 compound.putInt(TIME_TAG, invTime);
             }
         }));
-    }
-
-    public static void registerModelPredicate() {
-        ModelPredicateProviderRegistry.register(Items.MAGIC_BUNDLE, Identifier.of("filled"),
-                (stack, world, entity, seed) -> {
-                    BundleContentsComponent bundleComponent = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-                    return (bundleComponent == null || bundleComponent.isEmpty()) ? 0.0F : 0.0000001F;
-                }
-        );
     }
 }
