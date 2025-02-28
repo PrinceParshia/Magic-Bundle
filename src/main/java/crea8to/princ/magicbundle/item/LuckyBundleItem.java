@@ -35,13 +35,14 @@ public class LuckyBundleItem extends BundleItem {
 
         Random random = world.getRandom();
         NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
+        BundleContentsComponent bundleContentsComponent = (BundleContentsComponent) stack.get(DataComponentTypes.BUNDLE_CONTENTS);
         if (component == null) {
             return;
         }
 
         stack.set(DataComponentTypes.CUSTOM_DATA, component.apply(compound -> {
             if (!compound.contains(MAX_TIME_TAG, NbtElement.INT_TYPE)) {
-                compound.putInt(MAX_TIME_TAG, random.nextBetween(100, 200));
+                compound.putInt(MAX_TIME_TAG, random.nextBetween(2500, 6100));
             }
 
             if (compound.contains(TIME_TAG, NbtElement.INT_TYPE)) {
@@ -50,93 +51,160 @@ public class LuckyBundleItem extends BundleItem {
 
                 if (invTime >= (maxTimeTag - 100)) {
                     if (invTime % 20 == 0) {
-                        entity.sendMessage(Text.of("<LuckyBundle> An Action Happens In... " + (((maxTimeTag - invTime) / 20) + 1)));
+                        entity.sendMessage(Text.of("<LuckyBundle> An Action Executes In... " + (((maxTimeTag - invTime) / 20) + 1)));
                     }
                 }
 
                 if (invTime >= maxTimeTag) {
-                    if (random.nextBoolean()) {
-                        ItemStack diamond = new ItemStack(net.minecraft.item.Items.DIAMOND, 16);
-                        ItemStack netheriteIngot = new ItemStack(net.minecraft.item.Items.NETHERITE_INGOT, 4);
-                        ItemStack netherStar = new ItemStack(net.minecraft.item.Items.NETHER_STAR);
-                        ItemStack beacon = new ItemStack(net.minecraft.item.Items.BEACON);
-                        ItemStack loot = new ItemStack(net.minecraft.item.Items.STICK);
-                        ItemStack loot2 = new ItemStack(net.minecraft.item.Items.LEAD);
-                        ItemStack loot3 = new ItemStack(net.minecraft.item.Items.STRING);
-                        if (random.nextBoolean()) {
-                            loot = diamond;
-                        } else {
-                            if (random.nextBoolean()) {
-                                loot = diamond;
-                                loot2 = netherStar;
-                            } else {
+                    boolean hasGhastTear = false;
+                    if (bundleContentsComponent != null) {
+                        for (ItemStack itemStack : bundleContentsComponent.iterate()) {
+                            if (itemStack.isOf(net.minecraft.item.Items.GHAST_TEAR)) {
+                                hasGhastTear = true;
                                 if (random.nextBoolean()) {
-                                    loot = netheriteIngot;
-                                    loot2 = beacon;
+                                    ItemStack diamond = new ItemStack(net.minecraft.item.Items.DIAMOND, 16);
+                                    ItemStack netheriteIngot = new ItemStack(net.minecraft.item.Items.NETHERITE_INGOT, 4);
+                                    ItemStack netherStar = new ItemStack(net.minecraft.item.Items.NETHER_STAR);
+                                    ItemStack beacon = new ItemStack(net.minecraft.item.Items.BEACON);
+                                    ItemStack loot = new ItemStack(net.minecraft.item.Items.STICK);
+                                    ItemStack loot2 = new ItemStack(net.minecraft.item.Items.LEAD);
+                                    ItemStack loot3 = new ItemStack(net.minecraft.item.Items.STRING);
+                                    if (random.nextBoolean()) {
+                                        loot = diamond;
+                                    } else {
+                                        if (random.nextBoolean()) {
+                                            loot = diamond;
+                                            loot2 = netherStar;
+                                        } else {
+                                            if (random.nextBoolean()) {
+                                                loot = netheriteIngot;
+                                                loot2 = beacon;
+                                            } else {
+                                                loot = diamond;
+                                                loot2 = netheriteIngot;
+                                                loot3 = netherStar;
+                                            }
+                                        }
+                                    }
+
+                                    ItemStack droppedStack = new ItemStack(Items.USED_LUCKY_BUNDLE);
+                                    BundleContentsComponent updatedBundleContentsComponent = droppedStack.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(new ArrayList<>()));
+                                    List<ItemStack> updatedItems = new ArrayList<>();
+                                    updatedBundleContentsComponent.iterate().forEach(updatedItems::add);
+                                    updatedItems.add(loot);
+                                    updatedItems.add(loot2);
+                                    updatedItems.add(loot3);
+                                    droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(updatedItems));
+                                    entity.sendMessage(Text.of("<LuckyBundle> What a Luck!"));
+                                    entity.dropStack(droppedStack);
                                 } else {
-                                    loot = diamond;
-                                    loot2 = netheriteIngot;
-                                    loot3 = netherStar;
+                                    if (random.nextBoolean()) {
+                                        ItemStack diamondBlock = new ItemStack(net.minecraft.item.Items.DIAMOND, 8);
+                                        ItemStack netheriteIngot = new ItemStack(net.minecraft.item.Items.NETHERITE_INGOT, 8);
+                                        ItemStack netherLeggings = new ItemStack(net.minecraft.item.Items.NETHERITE_LEGGINGS);
+                                        ItemStack emeraldBlock = new ItemStack(net.minecraft.item.Items.EMERALD_BLOCK, 64);
+                                        ItemStack loot = new ItemStack(net.minecraft.item.Items.STICK);
+                                        ItemStack loot2 = new ItemStack(net.minecraft.item.Items.LEAD);
+                                        ItemStack loot3 = new ItemStack(net.minecraft.item.Items.STRING);
+                                        if (random.nextBoolean()) {
+                                            loot = diamondBlock;
+                                        } else {
+                                            if (random.nextBoolean()) {
+                                                loot = diamondBlock;
+                                                loot2 = netherLeggings;
+                                            } else {
+                                                if (random.nextBoolean()) {
+                                                    loot = netheriteIngot;
+                                                    loot2 = emeraldBlock;
+                                                } else {
+                                                    loot = diamondBlock;
+                                                    loot2 = netheriteIngot;
+                                                    loot3 = netherLeggings;
+                                                }
+                                            }
+                                        }
+
+                                        ItemStack droppedStack = new ItemStack(Items.USED_LUCKY_BUNDLE);
+                                        BundleContentsComponent updatedBundleContentsComponent = droppedStack.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(new ArrayList<>()));
+                                        List<ItemStack> updatedItems = new ArrayList<>();
+                                        updatedBundleContentsComponent.iterate().forEach(updatedItems::add);
+                                        updatedItems.add(loot);
+                                        updatedItems.add(loot2);
+                                        updatedItems.add(loot3);
+                                        droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(updatedItems));
+                                        entity.sendMessage(Text.of("<LuckyBundle> What a Lucky Luck! :>"));
+                                        entity.dropStack(droppedStack);
+                                    } else {
+                                        CreeperEntity creeper = EntityType.CREEPER.create(world);
+                                        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world);
+                                        if (creeper != null) {
+                                            creeper.refreshPositionAndAngles(entity.getBlockPos().getX(), entity.getBlockPos().getY(), entity.getBlockPos().getZ(), 0, 0);
+                                            creeper.onStruckByLightning((ServerWorld) world, lightningEntity);
+                                            world.spawnEntity(creeper);
+                                        }
+                                    }
+                                }
+                            } else if (!hasGhastTear && !bundleContentsComponent.isEmpty()) {
+                                if (random.nextBoolean()) {
+                                    CreeperEntity creeper = EntityType.CREEPER.create(world);
+                                    LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world);
+                                    if (creeper != null) {
+                                        creeper.refreshPositionAndAngles(entity.getBlockPos().getX(), entity.getBlockPos().getY(), entity.getBlockPos().getZ(), 0, 0);
+                                        creeper.onStruckByLightning((ServerWorld) world, lightningEntity);
+                                        world.spawnEntity(creeper);
+                                    }
+                                } else {
+                                    if (random.nextBoolean()) {
+                                        CreeperEntity creeper = EntityType.CREEPER.create(world);
+                                        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world);
+                                        if (creeper != null) {
+                                            creeper.refreshPositionAndAngles(entity.getBlockPos().getX(), entity.getBlockPos().getY(), entity.getBlockPos().getZ(), 0, 0);
+                                            creeper.onStruckByLightning((ServerWorld) world, lightningEntity);
+                                            world.spawnEntity(creeper);
+                                        }
+                                    } else {
+                                        ItemStack diamond = new ItemStack(net.minecraft.item.Items.DIAMOND, 16);
+                                        ItemStack netheriteIngot = new ItemStack(net.minecraft.item.Items.NETHERITE_INGOT, 4);
+                                        ItemStack netherStar = new ItemStack(net.minecraft.item.Items.NETHER_STAR);
+                                        ItemStack beacon = new ItemStack(net.minecraft.item.Items.BEACON);
+                                        ItemStack loot = new ItemStack(net.minecraft.item.Items.STICK);
+                                        ItemStack loot2 = new ItemStack(net.minecraft.item.Items.LEAD);
+                                        ItemStack loot3 = new ItemStack(net.minecraft.item.Items.STRING);
+                                        if (random.nextBoolean()) {
+                                            loot = diamond;
+                                        } else {
+                                            if (random.nextBoolean()) {
+                                                loot = diamond;
+                                                loot2 = netherStar;
+                                            } else {
+                                                if (random.nextBoolean()) {
+                                                    loot = netheriteIngot;
+                                                    loot2 = beacon;
+                                                } else {
+                                                    loot = diamond;
+                                                    loot2 = netheriteIngot;
+                                                    loot3 = netherStar;
+                                                }
+                                            }
+                                        }
+
+                                        ItemStack droppedStack = new ItemStack(Items.USED_LUCKY_BUNDLE);
+                                        BundleContentsComponent updatedBundleContentsComponent = droppedStack.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(new ArrayList<>()));
+                                        List<ItemStack> updatedItems = new ArrayList<>();
+                                        updatedBundleContentsComponent.iterate().forEach(updatedItems::add);
+                                        updatedItems.add(loot);
+                                        updatedItems.add(loot2);
+                                        updatedItems.add(loot3);
+                                        droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(updatedItems));
+                                        entity.sendMessage(Text.of("<LuckyBundle> What a Luck!"));
+                                        entity.dropStack(droppedStack);
+                                    }
                                 }
                             }
                         }
 
-                        ItemStack droppedStack = new ItemStack(Items.USED_LUCKY_BUNDLE);
-                        BundleContentsComponent bundleContentsComponent = droppedStack.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(new ArrayList<>()));
-                        List<ItemStack> updatedItems = new ArrayList<>();
-                        bundleContentsComponent.iterate().forEach(updatedItems::add);
-                        updatedItems.add(loot);
-                        updatedItems.add(loot2);
-                        updatedItems.add(loot3);
-                        droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(updatedItems));
-                        entity.sendMessage(Text.of("<LuckyBundle> What a Luck!"));
-                        entity.dropStack(droppedStack);
-                    }
-                    else {
-                        if (random.nextBoolean()) {
-                            ItemStack diamondBlock = new ItemStack(net.minecraft.item.Items.DIAMOND, 8);
-                            ItemStack netheriteIngot = new ItemStack(net.minecraft.item.Items.NETHERITE_INGOT, 8);
-                            ItemStack netherLeggings = new ItemStack(net.minecraft.item.Items.NETHERITE_LEGGINGS);
-                            ItemStack emeraldBlock = new ItemStack(net.minecraft.item.Items.EMERALD_BLOCK, 64);
-                            ItemStack loot = new ItemStack(net.minecraft.item.Items.STICK);
-                            ItemStack loot2 = new ItemStack(net.minecraft.item.Items.LEAD);
-                            ItemStack loot3 = new ItemStack(net.minecraft.item.Items.STRING);
-                            if (random.nextBoolean()) {
-                                loot = diamondBlock;
-                            } else {
-                                if (random.nextBoolean()) {
-                                    loot = diamondBlock;
-                                    loot2 = netherLeggings;
-                                } else {
-                                    if (random.nextBoolean()) {
-                                        loot = netheriteIngot;
-                                        loot2 = emeraldBlock;
-                                    } else {
-                                        loot = diamondBlock;
-                                        loot2 = netheriteIngot;
-                                        loot3 = netherLeggings;
-                                    }
-                                }
-                            }
-
-                            ItemStack droppedStack = new ItemStack(Items.USED_LUCKY_BUNDLE);
-                            BundleContentsComponent bundleContentsComponent = droppedStack.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(new ArrayList<>()));
-                            List<ItemStack> updatedItems = new ArrayList<>();
-                            bundleContentsComponent.iterate().forEach(updatedItems::add);
-                            updatedItems.add(loot);
-                            updatedItems.add(loot2);
-                            updatedItems.add(loot3);
-                            droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(updatedItems));
-                            entity.sendMessage(Text.of("<MagicBundle> What a Luck!"));
-                            entity.dropStack(droppedStack);
-                        } else {
-                            CreeperEntity creeper = EntityType.CREEPER.create(world);
-                            LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world);
-                            if (creeper != null) {
-                                creeper.refreshPositionAndAngles(entity.getBlockPos().getX(), entity.getBlockPos().getY(), entity.getBlockPos().getZ(), 0, 0);
-                                creeper.onStruckByLightning((ServerWorld) world, lightningEntity);
-                                world.spawnEntity(creeper);
-                            }
+                        if (!hasGhastTear && bundleContentsComponent.isEmpty()) {
+                            entity.sendMessage(Text.of("<LuckyBundle> At Least One Item/Ghast-Tear Is Needed!"));
                         }
                     }
 

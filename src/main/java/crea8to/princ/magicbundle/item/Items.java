@@ -50,6 +50,7 @@ public class Items {
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "lucky_bundle"), LUCKY_BUNDLE);
         bundleItemModelPredicateProvider(LUCKY_BUNDLE);
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "used_lucky_bundle"), USED_LUCKY_BUNDLE);
+        bundleItemModelPredicateProvider(USED_LUCKY_BUNDLE);
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
             entries.add(BROKEN_MAGIC_BUNDLE);
