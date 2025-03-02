@@ -1,11 +1,13 @@
-package crea8to.princ.magicbundle.item;
+package cre8to.princ.magicbundle.item;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BundleItem;
@@ -33,6 +35,8 @@ public class LuckyBundleItem extends BundleItem {
             return;
         }
 
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        assert player != null;
         Random random = world.getRandom();
         NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
         BundleContentsComponent bundleContentsComponent = (BundleContentsComponent) stack.get(DataComponentTypes.BUNDLE_CONTENTS);
@@ -51,7 +55,7 @@ public class LuckyBundleItem extends BundleItem {
 
                 if (invTime >= (maxTimeTag - 100)) {
                     if (invTime % 20 == 0) {
-                        entity.sendMessage(Text.of("<LuckyBundle> An Action Executes In... " + (((maxTimeTag - invTime) / 20) + 1)));
+                        player.sendMessage(Text.of("<LuckyBundle> An Action Executes In... " + (((maxTimeTag - invTime) / 20) + 1)), false);
                     }
                 }
 
@@ -95,8 +99,8 @@ public class LuckyBundleItem extends BundleItem {
                                     updatedItems.add(loot2);
                                     updatedItems.add(loot3);
                                     droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(updatedItems));
-                                    entity.sendMessage(Text.of("<LuckyBundle> What a Luck!"));
-                                    entity.dropStack(droppedStack);
+                                    player.sendMessage(Text.of("<LuckyBundle> What a Luck!"), false);
+                                    entity.dropStack((ServerWorld) world, droppedStack);
                                 } else {
                                     if (random.nextBoolean()) {
                                         ItemStack diamondBlock = new ItemStack(net.minecraft.item.Items.DIAMOND, 8);
@@ -132,11 +136,11 @@ public class LuckyBundleItem extends BundleItem {
                                         updatedItems.add(loot2);
                                         updatedItems.add(loot3);
                                         droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(updatedItems));
-                                        entity.sendMessage(Text.of("<LuckyBundle> What a Lucky Luck! :>"));
-                                        entity.dropStack(droppedStack);
+                                        player.sendMessage(Text.of("<LuckyBundle> What a Lucky Luck! :>"), false);
+                                        entity.dropStack((ServerWorld) world, droppedStack);
                                     } else {
-                                        CreeperEntity creeper = EntityType.CREEPER.create(world);
-                                        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world);
+                                        CreeperEntity creeper = EntityType.CREEPER.create(world, SpawnReason.COMMAND);
+                                        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world, SpawnReason.COMMAND);
                                         if (creeper != null) {
                                             creeper.refreshPositionAndAngles(entity.getBlockPos().getX(), entity.getBlockPos().getY(), entity.getBlockPos().getZ(), 0, 0);
                                             creeper.onStruckByLightning((ServerWorld) world, lightningEntity);
@@ -146,8 +150,8 @@ public class LuckyBundleItem extends BundleItem {
                                 }
                             } else if (!hasGhastTear && !bundleContentsComponent.isEmpty()) {
                                 if (random.nextBoolean()) {
-                                    CreeperEntity creeper = EntityType.CREEPER.create(world);
-                                    LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world);
+                                    CreeperEntity creeper = EntityType.CREEPER.create(world, SpawnReason.COMMAND);
+                                    LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world, SpawnReason.COMMAND);
                                     if (creeper != null) {
                                         creeper.refreshPositionAndAngles(entity.getBlockPos().getX(), entity.getBlockPos().getY(), entity.getBlockPos().getZ(), 0, 0);
                                         creeper.onStruckByLightning((ServerWorld) world, lightningEntity);
@@ -155,8 +159,8 @@ public class LuckyBundleItem extends BundleItem {
                                     }
                                 } else {
                                     if (random.nextBoolean()) {
-                                        CreeperEntity creeper = EntityType.CREEPER.create(world);
-                                        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world);
+                                        CreeperEntity creeper = EntityType.CREEPER.create(world, SpawnReason.COMMAND);
+                                        LightningEntity lightningEntity = EntityType.LIGHTNING_BOLT.create(world, SpawnReason.COMMAND);
                                         if (creeper != null) {
                                             creeper.refreshPositionAndAngles(entity.getBlockPos().getX(), entity.getBlockPos().getY(), entity.getBlockPos().getZ(), 0, 0);
                                             creeper.onStruckByLightning((ServerWorld) world, lightningEntity);
@@ -196,21 +200,19 @@ public class LuckyBundleItem extends BundleItem {
                                         updatedItems.add(loot2);
                                         updatedItems.add(loot3);
                                         droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, new BundleContentsComponent(updatedItems));
-                                        entity.sendMessage(Text.of("<LuckyBundle> What a Luck!"));
-                                        entity.dropStack(droppedStack);
+                                        player.sendMessage(Text.of("<LuckyBundle> What a Luck!"), false);
+                                        entity.dropStack((ServerWorld) world, droppedStack);
                                     }
                                 }
                             }
                         }
 
                         if (!hasGhastTear && bundleContentsComponent.isEmpty()) {
-                            entity.sendMessage(Text.of("<LuckyBundle> At Least One Item/Ghast-Tear Is Needed!"));
+                            player.sendMessage(Text.of("<LuckyBundle> At Least One Item/Ghast-Tear Is Needed!"), false);
                         }
                     }
 
-                    if (entity instanceof PlayerEntity player) {
-                        player.getInventory().removeOne(stack);
-                    }
+                    player.getInventory().removeOne(stack);
                     compound.remove(TIME_TAG);
                     return;
                 }

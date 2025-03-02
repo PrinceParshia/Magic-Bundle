@@ -1,7 +1,7 @@
-package crea8to.princ.magicbundle.item;
+package cre8to.princ.magicbundle.item;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.client.item.ModelPredicateProviderRegistry;
+import net.minecraft.client.item.ItemModelManager;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.component.type.NbtComponent;
@@ -12,7 +12,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
-import static crea8to.princ.magicbundle.MagicBundle.MOD_ID;
+import static cre8to.princ.magicbundle.MagicBundle.MOD_ID;
 
 public class Items {
     public static final Item BROKEN_MAGIC_BUNDLE = new Item(new Item.Settings()
@@ -43,24 +43,14 @@ public class Items {
     public static void register() {
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "broken_magic_bundle"), BROKEN_MAGIC_BUNDLE);
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "magic_bundle"), MAGIC_BUNDLE);
-        bundleItemModelPredicateProvider(MAGIC_BUNDLE);
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "used_magic_bundle"), USED_MAGIC_BUNDLE);
-        bundleItemModelPredicateProvider(USED_MAGIC_BUNDLE);
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "broken_lucky_bundle"), BROKEN_LUCKY_BUNDLE);
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "lucky_bundle"), LUCKY_BUNDLE);
-        bundleItemModelPredicateProvider(LUCKY_BUNDLE);
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "used_lucky_bundle"), USED_LUCKY_BUNDLE);
-        bundleItemModelPredicateProvider(USED_LUCKY_BUNDLE);
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
             entries.add(BROKEN_MAGIC_BUNDLE);
             entries.add(BROKEN_LUCKY_BUNDLE);
-        });
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.SEARCH).register(entries -> {
-            entries.add(MAGIC_BUNDLE);
-            entries.add(USED_MAGIC_BUNDLE);
-            entries.add(LUCKY_BUNDLE);
-            entries.add(USED_LUCKY_BUNDLE);
         });
     }
 

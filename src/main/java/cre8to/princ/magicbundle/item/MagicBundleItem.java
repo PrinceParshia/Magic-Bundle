@@ -1,5 +1,6 @@
-package crea8to.princ.magicbundle.item;
+package cre8to.princ.magicbundle.item;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.component.type.NbtComponent;
@@ -8,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BundleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -26,6 +28,8 @@ public class MagicBundleItem extends BundleItem {
             return;
         }
 
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        assert player != null;
         Random random = world.getRandom();
         NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
         BundleContentsComponent bundleContentsComponent = (BundleContentsComponent) stack.get(DataComponentTypes.BUNDLE_CONTENTS);
@@ -44,13 +48,13 @@ public class MagicBundleItem extends BundleItem {
 
                 if (invTime >= (maxTimeTag - 100)) {
                     if (invTime % 20 == 0) {
-                        entity.sendMessage(Text.of("<MagicBundle> An Action Happens In... " + (((maxTimeTag - invTime) / 20) + 1)));
+                        player.sendMessage(Text.of("<MagicBundle> An Action Happens In... " + (((maxTimeTag - invTime) / 20) + 1)), false);
                     }
                 }
 
                 if (invTime >= maxTimeTag) {
                     if (random.nextBoolean()) {
-                        entity.sendMessage(Text.of("<MagicBundle> Bad Luck!"));
+                        player.sendMessage(Text.of("<MagicBundle> Bad Luck!"), false);
                         world.createExplosion(
                                 null,
                                 entity.getX(),
@@ -62,7 +66,7 @@ public class MagicBundleItem extends BundleItem {
                     }
                     else {
                         if (random.nextBoolean()) {
-                            entity.sendMessage(Text.of("<MagicBundle> Bad Luck!"));
+                            player.sendMessage(Text.of("<MagicBundle> Bad Luck!"), false);
                             world.createExplosion(
                                     null,
                                     entity.getX(),
@@ -74,15 +78,13 @@ public class MagicBundleItem extends BundleItem {
                         } else {
                             ItemStack droppedStack = new ItemStack(Items.USED_MAGIC_BUNDLE);
                             droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, bundleContentsComponent);
-                            entity.sendMessage(Text.of("<MagicBundle> What a Luck!"));
-                            entity.dropStack(droppedStack);
-                            entity.dropStack(droppedStack.copy());
+                            player.sendMessage(Text.of("<MagicBundle> What a Luck!"), false);
+                            entity.dropStack((ServerWorld) world, droppedStack);
+                            entity.dropStack((ServerWorld) world, droppedStack.copy());
                         }
                     }
 
-                    if (entity instanceof PlayerEntity player) {
-                        player.getInventory().removeOne(stack);
-                    }
+                    player.getInventory().removeOne(stack);
                     compound.remove(TIME_TAG);
                     return;
                 }
