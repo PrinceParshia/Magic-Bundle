@@ -2,8 +2,5 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "magic-bundle:item/lucky_bundle"
-  },
-  "overrides": [
-    { "predicate": { "filled": 0.0000001 }, "model": "magic-bundle:item/lucky_bundle_filled" }
-  ]
+  }
 }

@@ -1,6 +1,0 @@
-{
-  "parent": "magic-bundle:item/magic_bundle",
-  "textures": {
-    "layer0": "magic-bundle:item/magic_bundle_filled"
-  }
-}

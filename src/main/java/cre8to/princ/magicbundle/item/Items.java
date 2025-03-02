@@ -1,7 +1,6 @@
 package cre8to.princ.magicbundle.item;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.client.item.ItemModelManager;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.component.type.NbtComponent;
@@ -49,17 +48,7 @@ public class Items {
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "used_lucky_bundle"), USED_LUCKY_BUNDLE);
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
-            entries.add(BROKEN_MAGIC_BUNDLE);
             entries.add(BROKEN_LUCKY_BUNDLE);
         });
-    }
-
-    public static void bundleItemModelPredicateProvider(Item item) {
-        ModelPredicateProviderRegistry.register(item, Identifier.of("filled"),
-                (stack, world, entity, seed) -> {
-                    BundleContentsComponent bundleContentsComponent = (BundleContentsComponent) stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-                    return (bundleContentsComponent == null || bundleContentsComponent.isEmpty()) ? 0.0F : 0.0000001F;
-                }
-        );
     }
 }
