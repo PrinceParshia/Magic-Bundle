@@ -1,18 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "equipment",
   "key": {
-    "#": {
-      "item": "magic-bundle:broken_magic_bundle"
-    },
-    "0": {
-      "item": "minecraft:leather"
-    }
+    "#": "minecraft:leather",
+    "-": "magic-bundle:broken_magic_bundle"
   },
   "pattern": [
-    " 0 ",
-    "0#0",
-    " 0 "
+    " # ",
+    "#-#",
+    " # "
   ],
   "result": {
     "count": 1,

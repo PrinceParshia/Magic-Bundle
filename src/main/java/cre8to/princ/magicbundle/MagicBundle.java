@@ -27,13 +27,12 @@ public class MagicBundle implements ModInitializer {
 
 				tableBuilder.pool(poolBuilder);
 			}
-			if (key.equals(LootTables.OCEAN_RUIN_WARM_ARCHAEOLOGY)) {
-				LootPool poolBuilder = LootPool.builder()
-						.with(ItemEntry.builder(Items.BROKEN_LUCKY_BUNDLE))
-						.rolls(ConstantLootNumberProvider.create(1))
-						.build();
-
-				tableBuilder.pool(poolBuilder);
+			if (source.isBuiltin()) {
+				if (key.equals(LootTables.OCEAN_RUIN_WARM_ARCHAEOLOGY)) {
+					tableBuilder.modifyPools(poolBuilder -> {
+						poolBuilder.with(ItemEntry.builder(Items.BROKEN_LUCKY_BUNDLE));
+					});
+				}
 			}
 		});
 	}
