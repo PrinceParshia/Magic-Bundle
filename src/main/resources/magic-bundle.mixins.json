@@ -1,6 +1,6 @@
 {
 	"required": false,
-	"package": "crea8to.princ.magicbundle.mixin",
+	"package": "cre8to.princ.magicbundle.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 	],

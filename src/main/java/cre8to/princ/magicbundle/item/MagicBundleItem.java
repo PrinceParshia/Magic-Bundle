@@ -1,4 +1,4 @@
-package crea8to.princ.magicbundle.item;
+package cre8to.princ.magicbundle.item;
 
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;

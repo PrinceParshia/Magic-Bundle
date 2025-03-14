@@ -1,4 +1,4 @@
-package crea8to.princ.magicbundle.item;
+package cre8to.princ.magicbundle.item;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
@@ -12,7 +12,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
-import static crea8to.princ.magicbundle.MagicBundle.MOD_ID;
+import static cre8to.princ.magicbundle.MagicBundle.MOD_ID;
 
 public class Items {
     public static final Item BROKEN_MAGIC_BUNDLE = new Item(new Item.Settings()
@@ -55,12 +55,6 @@ public class Items {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
             entries.add(BROKEN_MAGIC_BUNDLE);
             entries.add(BROKEN_LUCKY_BUNDLE);
-        });
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.SEARCH).register(entries -> {
-            entries.add(MAGIC_BUNDLE);
-            entries.add(USED_MAGIC_BUNDLE);
-            entries.add(LUCKY_BUNDLE);
-            entries.add(USED_LUCKY_BUNDLE);
         });
     }
 

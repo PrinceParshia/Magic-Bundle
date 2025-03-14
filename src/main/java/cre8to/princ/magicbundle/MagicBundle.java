@@ -1,6 +1,6 @@
-package crea8to.princ.magicbundle;
+package cre8to.princ.magicbundle;
 
-import crea8to.princ.magicbundle.item.Items;
+import cre8to.princ.magicbundle.item.Items;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.loot.LootPool;

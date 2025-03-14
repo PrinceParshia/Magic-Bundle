@@ -15,10 +15,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"crea8to.princ.magicbundle.MagicBundle"
+			"cre8to.princ.magicbundle.MagicBundle"
 		],
 		"client": [
-			"crea8to.princ.magicbundle.MagicBundleClient"
+			"cre8to.princ.magicbundle.MagicBundleClient"
 		]
 	},
 	"mixins": [

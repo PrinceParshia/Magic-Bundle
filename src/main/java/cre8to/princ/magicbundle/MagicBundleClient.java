@@ -1,4 +1,4 @@
-package crea8to.princ.magicbundle;
+package cre8to.princ.magicbundle;
 
 import net.fabricmc.api.ClientModInitializer;
 
