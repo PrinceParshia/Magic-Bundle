@@ -36,20 +36,20 @@ public class MagicBundleItem extends BundleItem {
         PlayerEntity player = MinecraftClient.getInstance().player;
         Random random = world.getRandom();
         NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
-        BundleContentsComponent bundleContentsComponent = (BundleContentsComponent) stack.get(DataComponentTypes.BUNDLE_CONTENTS);
+        BundleContentsComponent bundleContentsComponent = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
         if (component == null) {
             return;
         }
 
         if (player != null) {
             stack.set(DataComponentTypes.CUSTOM_DATA, component.apply(compound -> {
-                if (!compound.contains(MAX_TIME_TAG) && compound.get(MAX_TIME_TAG) instanceof NbtInt) {
+                if (!compound.contains(MAX_TIME_TAG)) {
                     compound.putInt(MAX_TIME_TAG, random.nextBetween(200, 600));
                 }
 
-                if (compound.contains(TIME_TAG) && compound.get(TIME_TAG) instanceof NbtInt) {
+                if (compound.contains(TIME_TAG)) {
                     int invTime = compound.getInt(TIME_TAG).orElse(0) + 1;
-                    int maxTimeTag = compound.getInt(MAX_TIME_TAG).orElse(random.nextBetween(200, 600));
+                    int maxTimeTag = compound.getInt(MAX_TIME_TAG).orElse(0);
 
                     if (invTime >= (maxTimeTag - 100)) {
                         if (invTime % 20 == 0) {
@@ -84,8 +84,8 @@ public class MagicBundleItem extends BundleItem {
                                 ItemStack droppedStack = new ItemStack(Items.USED_MAGIC_BUNDLE);
                                 droppedStack.set(DataComponentTypes.BUNDLE_CONTENTS, bundleContentsComponent);
                                 player.sendMessage(Text.of("<MagicBundle> What a Luck!"), false);
-                                entity.dropStack((ServerWorld) world, droppedStack);
-                                entity.dropStack((ServerWorld) world, droppedStack.copy());
+                                entity.dropStack(world, droppedStack);
+                                entity.dropStack(world, droppedStack.copy());
                             }
                         }
 
