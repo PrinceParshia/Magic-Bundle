@@ -5,14 +5,19 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BundleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtInt;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class MagicBundleItem extends BundleItem {
     public static final String TIME_TAG = "invTime";
@@ -23,7 +28,7 @@ public class MagicBundleItem extends BundleItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
         if (world.isClient) {
             return;
         }
@@ -38,13 +43,13 @@ public class MagicBundleItem extends BundleItem {
 
         if (player != null) {
             stack.set(DataComponentTypes.CUSTOM_DATA, component.apply(compound -> {
-                if (!compound.contains(MAX_TIME_TAG, NbtElement.INT_TYPE)) {
-                    compound.putInt(MAX_TIME_TAG, random.nextBetween(2500, 6100));
+                if (!compound.contains(MAX_TIME_TAG) && compound.get(MAX_TIME_TAG) instanceof NbtInt) {
+                    compound.putInt(MAX_TIME_TAG, random.nextBetween(200, 600));
                 }
 
-                if (compound.contains(TIME_TAG, NbtElement.INT_TYPE)) {
-                    int invTime = compound.getInt(TIME_TAG) + 1;
-                    int maxTimeTag = compound.getInt(MAX_TIME_TAG);
+                if (compound.contains(TIME_TAG) && compound.get(TIME_TAG) instanceof NbtInt) {
+                    int invTime = compound.getInt(TIME_TAG).orElse(0) + 1;
+                    int maxTimeTag = compound.getInt(MAX_TIME_TAG).orElse(random.nextBetween(200, 600));
 
                     if (invTime >= (maxTimeTag - 100)) {
                         if (invTime % 20 == 0) {
